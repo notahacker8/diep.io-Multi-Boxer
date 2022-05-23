@@ -3,3 +3,6 @@ A script that allows you to run multiple clients in the game "diep.io". Also inc
 
 # Sample Image(s)
 ![Alt text](/diep.io-multiboxer-sample-image.png)
+
+# Notes
+- Does not work in fullscreen
