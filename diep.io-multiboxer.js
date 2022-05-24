@@ -62,7 +62,7 @@ function hook_input_to_multibox_windows()
         for (let i = 0 ; i < multibox_count ; i++)
         {
             var m_window = m_window_array[i];
-            var m_scale = m_window.localStorage['no_retina'] ? 1.0 : window.devicePixelRatio;
+            var m_scale = m_window.localStorage['no_retina'] ? 1.0 : m_window.devicePixelRatio;
             var m_canvas = m_window.document.getElementById("canvas")
             m_window['input']['mouse'](e.clientX * m_scale * (m_canvas.width / canvas.width),
                                        e.clientY * m_scale * (m_canvas.height / canvas.height));
