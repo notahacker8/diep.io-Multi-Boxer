@@ -124,7 +124,7 @@ function hook_input_to_multibox_windows()
 
 
 
-
+//If in any case, we want to unhook the input to the multibox windows from the main window.
 function unhook_input_from_multibox_windows()
 {
     
