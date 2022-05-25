@@ -46,8 +46,6 @@ function flushInputHooks()
 
 
 
-,
-
 //Anytime we move our tank or press a key or move our mouse, the inputs will be sent to the other windows.
 //This is basically a copy of the 'unhook_input_from_multibox_windows' function, but we are adding code that iterates the inputs through the other windows.
 function hook_input_to_multibox_windows()
