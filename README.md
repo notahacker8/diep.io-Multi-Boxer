@@ -16,3 +16,6 @@ A script that allows you to run multiple clients in the game "diep.io". Also inc
 # Notes
 - Does not work in fullscreen
 - The controlling window will be titled "diep.io (main)"
+- If you ever need to undo the input sync:
+- >> unhook()
+- You can control the tanks individually by focusing onto windows that aren't the main window.
