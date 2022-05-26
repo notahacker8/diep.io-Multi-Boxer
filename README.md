@@ -1,8 +1,9 @@
 # diep.io-Multi-Boxer
 A script that allows you to run multiple clients in the game "diep.io". Also includes some other stuff. (maybe)
 
-# Sample Image
+# Sample Images
 ![Alt text](/diep.io-multiboxer-sample-image.png)
+![Alt text](/diep.io-multiboxer-sample-image-2.png)
 
 # Instructions
 - Open the browser console
