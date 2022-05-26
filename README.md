@@ -12,8 +12,6 @@ A script that allows you to run multiple clients in the game "diep.io". Also inc
 - >> multibox()
 - Seperate the new tab into its own window - REALLY IMPORTANT
 - >> hook()
-- If you ever need to undo the input syncing, 
-- >>  unhook_input_from_multibox_windows()
 
 # Notes
 - Does not work in fullscreen
