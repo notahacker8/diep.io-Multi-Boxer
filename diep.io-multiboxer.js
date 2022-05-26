@@ -6,17 +6,15 @@
 var copied_party_link = ""
 var canvas = document.getElementById("canvas");
 var m_window_array = []
-var multibox_count = 0;
 var typing = false //c.js
 var scale = window.localStorage['no_retina'] ? 1.0 : window.devicePixelRatio; //c.js
 
 
-function create_multibox_window()
+function multibox()
 {
     var url = "https://" + copied_party_link
     document.title = "diep.io (main)"
     var m_window = window.open(url);
-    multibox_count++;
     m_window_array.push(m_window)
 }
 
@@ -47,8 +45,8 @@ function flushInputHooks()
 
 
 //Anytime we move our tank or press a key or move our mouse, the inputs will be sent to the other windows.
-//This is basically a copy of the 'unhook_input_from_multibox_windows' function, but we are adding code that iterates the inputs through the other windows.
-function hook_input_to_multibox_windows()
+//This is basically a copy of the 'unhook' function, but we are adding code that iterates the inputs through the other windows.
+function hook()
 {
     
     canvas.onmousemove = function(e)
@@ -57,13 +55,29 @@ function hook_input_to_multibox_windows()
         
         if(!window['input']) return;
         window['input']['mouse'](e.clientX * scale, e.clientY * scale);
-        for (let i = 0 ; i < multibox_count ; i++)
+        for (let i = 0 ; i < m_window_array.length ; i++)
         {
-            var m_window = m_window_array[i];
-            var m_scale = m_window.localStorage['no_retina'] ? 1.0 : m_window.devicePixelRatio;
-            var m_canvas = m_window.document.getElementById("canvas")
-            m_window['input']['mouse'](e.clientX * m_scale * (m_canvas.width / canvas.width),
-                                       e.clientY * m_scale * (m_canvas.height / canvas.height));
+            var m_window = m_window_array[i].window;
+            if (m_window)
+            {
+                if (m_window["input"])
+                {
+                    var m_scale = m_window.localStorage['no_retina'] ? 1.0 : m_window.devicePixelRatio;
+                    if (m_scale)
+                    {
+                        var m_canvas = m_window.document.getElementById("canvas")
+                        if (m_canvas)
+                        {
+                        m_window['input']['mouse'](e.clientX * m_scale * (m_canvas.width / canvas.width),
+                                                   e.clientY * m_scale * (m_canvas.height / canvas.height));
+                        }
+                    }
+                }
+            }
+            else
+            {
+                m_window_array.splice(i, 1);
+            }
         }
     }
 
@@ -77,10 +91,20 @@ function hook_input_to_multibox_windows()
         if(!window['input']) return;
         if(e.keyCode >= 112 && e.keyCode <= 130 && e.keyCode != 113) return; // F2- keys, don't prevent
         window['input']['keyDown'](e.keyCode);
-        for (let i = 0 ; i < multibox_count ; i++)
+        for (let i = 0 ; i < m_window_array.length ; i++)
         {
-            var m_window = m_window_array[i];
-            m_window['input']['keyDown'](e.keyCode);
+            var m_window = m_window_array[i].window;
+            if (m_window)
+            {
+                if (m_window["input"])
+                {
+                    m_window['input']['keyDown'](e.keyCode);
+                }
+            }
+            else
+            {
+                m_window_array.splice(i, 1);
+            }
         }
         
         if(e.keyCode == 9) preventDefault(e);
@@ -96,10 +120,20 @@ function hook_input_to_multibox_windows()
         if(!window['input']) return;
         if(e.keyCode >= 112 && e.keyCode <= 130 && e.keyCode != 113) return; // F2- keys, don't prevent
         window['input']['keyUp'](e.keyCode);
-        for (let i = 0 ; i < multibox_count ; i++)
+        for (let i = 0 ; i < m_window_array.length ; i++)
         {
-            var m_window = m_window_array[i];
-            m_window['input']['keyUp'](e.keyCode);
+            var m_window = m_window_array[i].window;
+            if (m_window)
+            {
+                if (m_window["input"])
+                {
+                    m_window['input']['keyUp'](e.keyCode);
+                }
+            }
+            else
+            {
+                m_window_array.splice(i, 1);
+            };
         }
         
         if(e.keyCode == 9) preventDefault(e);
@@ -123,7 +157,7 @@ function hook_input_to_multibox_windows()
 
 
 //If in any case, we want to unhook the input to the multibox windows from the main window.
-function unhook_input_from_multibox_windows()
+function unhook()
 {
     
     //c.js
@@ -169,9 +203,9 @@ function unhook_input_from_multibox_windows()
 
 
 //A function for fun, meaning so we can set up octo-tanks easily like in the sample image.
-function octo_tank_multibox_queue_setup()
+function octo()
 {
-    for (let i = 0 ; i < multibox_count ; i++)
+    for (let i = 0 ; i < m_window_array.length ; i++)
     {
         //Got this command from the diep.io wiki page for console commands.
         m_window_array[i].input.execute("game_stats_build 657821656577224656546572277257444");
@@ -189,3 +223,4 @@ function octo_tank_multibox_queue_setup()
      */
     
 }
+
