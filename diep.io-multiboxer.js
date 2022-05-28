@@ -84,6 +84,19 @@ function hook()
 
     window.onkeydown = function(e)
     {
+	    for (let i = 0 ; i < m_window_array.length ; i++)
+        {
+            var m_window = m_window_array[i].window;
+            if (m_window)
+            {
+                m_window.onkeydown(e)
+            }
+            else
+            {
+                m_window_array.splice(i, 1);
+            };
+        }
+
         flushInputHooks();
         
         e = e || window.event;
@@ -91,21 +104,6 @@ function hook()
         if(!window['input']) return;
         if(e.keyCode >= 112 && e.keyCode <= 130 && e.keyCode != 113) return; // F2- keys, don't prevent
         window['input']['keyDown'](e.keyCode);
-        for (let i = 0 ; i < m_window_array.length ; i++)
-        {
-            var m_window = m_window_array[i].window;
-            if (m_window)
-            {
-                if (m_window["input"])
-                {
-                    m_window['input']['keyDown'](e.keyCode);
-                }
-            }
-            else
-            {
-                m_window_array.splice(i, 1);
-            }
-        }
         
         if(e.keyCode == 9) preventDefault(e);
         if(!typing && !e.ctrlKey && !e.metaKey) preventDefault(e);
@@ -113,6 +111,18 @@ function hook()
 
     window.onkeyup = function(e)
     {
+	    for (let i = 0 ; i < m_window_array.length ; i++)
+        {
+            var m_window = m_window_array[i].window;
+            if (m_window)
+            {
+                m_window.onkeyup(e)
+            }
+            else
+            {
+                m_window_array.splice(i, 1);
+            };
+        }
         flushInputHooks();
         
         e = e || window.event;
@@ -120,21 +130,6 @@ function hook()
         if(!window['input']) return;
         if(e.keyCode >= 112 && e.keyCode <= 130 && e.keyCode != 113) return; // F2- keys, don't prevent
         window['input']['keyUp'](e.keyCode);
-        for (let i = 0 ; i < m_window_array.length ; i++)
-        {
-            var m_window = m_window_array[i].window;
-            if (m_window)
-            {
-                if (m_window["input"])
-                {
-                    m_window['input']['keyUp'](e.keyCode);
-                }
-            }
-            else
-            {
-                m_window_array.splice(i, 1);
-            };
-        }
         
         if(e.keyCode == 9) preventDefault(e);
         if(!typing && !e.ctrlKey && !e.metaKey) preventDefault(e);
@@ -202,7 +197,7 @@ function unhook()
 
 
 
-//A function for fun, meaning so we can set up octo-tanks easily like in the sample image.
+//A function for fun, so we can set up octo-tanks easily like in the sample images.
 function octo()
 {
     for (let i = 0 ; i < m_window_array.length ; i++)
