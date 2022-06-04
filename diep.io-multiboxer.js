@@ -42,8 +42,6 @@ function flushInputHooks()
 
 
 
-
-
 //Anytime we move our tank or press a key or move our mouse, the inputs will be sent to the other windows.
 //This is basically a copy of the 'unhook' function, but we are adding code that iterates the inputs through the other windows.
 function hook()
@@ -74,29 +72,73 @@ function hook()
                     }
                 }
             }
-            else
-            {
-                m_window_array.splice(i, 1);
-            }
         }
     }
+
+canvas.onmousedown = function(e) {
+	flushInputHooks();
+	
+	e = e || window.event;
+	
+	if(!window['input']) return;
+	
+	preventDefault(e);
+	
+	if(!e.which && e.button !== undefined ) {
+		e.which = (e.button & 1 ? 1 : (e.button & 2 ? 3 : (e.button & 4 ? 2 : 0)));
+	}
+	
+	if(e.which >= 1 && e.which <= 3) 
+	{
+	     window['input']['keyDown'](e.which);
+	     for (let i = 0 ; i < m_window_array.length ; i++)
+             {
+            	var m_window = m_window_array[i].window;
+            	if (m_window)
+            	{
+                	      if (m_window["input"])
+                	      {
+                  	   m_window['input']['keyDown'](e.which);
+                	      }
+                 }
+              }
+	}
+}
+
+
+canvas.onmouseup = function(e) {
+	flushInputHooks();
+	
+	e = e || window.event;
+	
+	if(!window['input']) return;
+	
+	preventDefault(e);
+	
+	if(!e.which && e.button !== undefined ) {
+		e.which = (e.button & 1 ? 1 : (e.button & 2 ? 3 : (e.button & 4 ? 2 : 0)));
+	}
+	
+	if(e.which >= 1 && e.which <= 3)
+	{
+		window['input']['keyUp'](e.which);
+		for (let i = 0 ; i < m_window_array.length ; i++)
+       		{
+                      var m_window = m_window_array[i].window;
+            	     if (m_window)
+            	     {
+                		if (m_window["input"])
+                		{
+                    	      m_window['input']['keyUp'](e.which);
+                		}	
+            	     }
+                }
+	}
+}
 
 
     window.onkeydown = function(e)
     {
-	    for (let i = 0 ; i < m_window_array.length ; i++)
-        {
-            var m_window = m_window_array[i].window;
-            if (m_window)
-            {
-                m_window.onkeydown(e)
-            }
-            else
-            {
-                m_window_array.splice(i, 1);
-            };
-        }
-
         flushInputHooks();
         
         e = e || window.event;
@@ -104,6 +146,17 @@ function hook()
         if(!window['input']) return;
         if(e.keyCode >= 112 && e.keyCode <= 130 && e.keyCode != 113) return; // F2- keys, don't prevent
         window['input']['keyDown'](e.keyCode);
+        for (let i = 0 ; i < m_window_array.length ; i++)
+        {
+            var m_window = m_window_array[i].window;
+            if (m_window)
+            {
+                if (m_window["input"])
+                {
+                    m_window['input']['keyDown'](e.keyCode);
+                }
+            }
+        }
         
         if(e.keyCode == 9) preventDefault(e);
         if(!typing && !e.ctrlKey && !e.metaKey) preventDefault(e);
@@ -111,18 +164,6 @@ function hook()
 
     window.onkeyup = function(e)
     {
-	    for (let i = 0 ; i < m_window_array.length ; i++)
-        {
-            var m_window = m_window_array[i].window;
-            if (m_window)
-            {
-                m_window.onkeyup(e)
-            }
-            else
-            {
-                m_window_array.splice(i, 1);
-            };
-        }
         flushInputHooks();
         
         e = e || window.event;
@@ -130,6 +171,17 @@ function hook()
         if(!window['input']) return;
         if(e.keyCode >= 112 && e.keyCode <= 130 && e.keyCode != 113) return; // F2- keys, don't prevent
         window['input']['keyUp'](e.keyCode);
+        for (let i = 0 ; i < m_window_array.length ; i++)
+        {
+            var m_window = m_window_array[i].window;
+            if (m_window)
+            {
+                if (m_window["input"])
+                {
+                    m_window['input']['keyUp'](e.keyCode);
+                }
+            }
+        }
         
         if(e.keyCode == 9) preventDefault(e);
         if(!typing && !e.ctrlKey && !e.metaKey) preventDefault(e);
@@ -164,6 +216,40 @@ function unhook()
         window['input']['mouse'](e.clientX * scale, e.clientY * scale);
     }
 
+//c.js
+canvas.onmousedown = function(e) {
+	flushInputHooks();
+	
+	e = e || window.event;
+	
+	if(!window['input']) return;
+	
+	preventDefault(e);
+	
+	if(!e.which && e.button !== undefined ) {
+		e.which = (e.button & 1 ? 1 : (e.button & 2 ? 3 : (e.button & 4 ? 2 : 0)));
+	}
+	
+	if(e.which >= 1 && e.which <= 3) window['input']['keyDown'](e.which);
+}
+
+//c.js
+canvas.onmouseup = function(e) {
+	flushInputHooks();
+	
+	e = e || window.event;
+	
+	if(!window['input']) return;
+	
+	preventDefault(e);
+	
+	if(!e.which && e.button !== undefined ) {
+		e.which = (e.button & 1 ? 1 : (e.button & 2 ? 3 : (e.button & 4 ? 2 : 0)));
+	}
+	
+	if(e.which >= 1 && e.which <= 3) window['input']['keyUp'](e.which);
+}
+
     //c.js
     window.onkeydown = function(e)
     {
@@ -197,15 +283,20 @@ function unhook()
 
 
 
-//A function for fun, so we can set up octo-tanks easily like in the sample images.
+
+
+
+
+//A function for fun, so we can set up octo-tanks easily like in the sample image.
 function octo()
 {
+    var build = "game_stats_build 657821656577224656546572277257444"
     for (let i = 0 ; i < m_window_array.length ; i++)
     {
         //Got this command from the diep.io wiki page for console commands.
-        m_window_array[i].input.execute("game_stats_build 657821656577224656546572277257444");
+        m_window_array[i].input.execute(build);
     }
-    window.input.execute("game_stats_build 657821656577224656546572277257444");
+    window.input.execute(build);
     /*
      1: health regen
      2: max health
@@ -219,3 +310,24 @@ function octo()
     
 }
 
+function necro()
+{
+    var build = "game_stats_build 657412222657465465465465465477777"
+    for (let i = 0 ; i < m_window_array.length ; i++)
+    {
+        //Got this command from the diep.io wiki page for console commands.
+        m_window_array[i].input.execute(build);
+    }
+    window.input.execute(build);
+    /*
+     1: health regen
+     2: max health
+     3: body dmg
+     4: bullet speed
+     5: bullet pen
+     6: bullet dmg
+     7: reload
+     8: speed
+     */
+    
+}
