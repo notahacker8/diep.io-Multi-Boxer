@@ -11,7 +11,7 @@ A script that allows you to run multiple clients in the game "diep.io". Also inc
 - Press 'Copy Party Link' in the top right corner of the main menu
 - >> copied_party_link = "[paste link here]"
 - >> multibox()
-- Seperate the new tab into its own window - REALLY IMPORTANT
+- Separate the new tab into its own window - REALLY IMPORTANT
 - >> hook()
 
 # Notes
